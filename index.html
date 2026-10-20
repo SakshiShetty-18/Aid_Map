@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TriageMap | Disaster Response Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">＋</span><div><strong>TriageMap</strong><small>DISASTER RESPONSE</small></div></div>
+    <nav>
+      <button class="nav-link active" data-view="Overview">▦ <span>Overview</span></button>
+      <button class="nav-link" data-view="Incident Map">⌖ <span>Incident Map</span></button>
+      <button class="nav-link" data-view="All Reports">▤ <span>All Reports</span></button>
+      <button class="nav-link" data-view="Silent Zones">◉ <span>Silent Zones</span></button>
+      <button class="nav-link" data-view="Decision History">↺ <span>Decision History</span></button>
+    </nav>
+    <div class="sidebar-note"><span class="pulse"></span><div><b>Demo environment</b><small>Simulated data only</small></div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><div class="eyebrow">EMERGENCY OPERATIONS</div><h1 id="pageTitle">Disaster Response Control Center</h1></div>
+      <div class="top-actions"><span class="demo-badge">● DEMO MODE</span><div class="avatar">CO</div></div>
+    </header>
+
+    <section class="intro-row">
+      <div><p class="tagline">Help should reach the quietest places first.</p><p class="subtle">Review incidents, understand priorities, and keep humans in control.</p></div>
+      <span class="updated">● System ready · Simulated data</span>
+    </section>
+
+    <section class="stats">
+      <article class="stat-card"><div class="stat-top"><span>Active incidents</span><span class="stat-icon blue">▦</span></div><strong id="activeCount">8</strong><small>Across demo region</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Critical incidents</span><span class="stat-icon red">!</span></div><strong id="criticalCount">2</strong><small>Require urgent review</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Silent zones</span><span class="stat-icon amber">⌖</span></div><strong id="zoneCount">3</strong><small>Need verification</small></article>
+      <article class="stat-card"><div class="stat-top"><span>Pending decisions</span><span class="stat-icon purple">◷</span></div><strong id="pendingCount">5</strong><small>Awaiting coordinator</small></article>
+    </section>
+
+    <section class="section-heading"><div><h2>Incident overview</h2><p class="subtle">Select an incident to review its details and priority score.</p></div><span class="legend"><i class="dot critical"></i> Critical <i class="dot high"></i> High <i class="dot medium"></i> Medium</span></section>
+
+    <section class="workspace">
+      <article class="panel map-panel">
+        <div class="panel-head"><div><h3>Incident map</h3><p class="subtle">Coastal Karnataka · Demo locations</p></div><span class="map-label">● SIMULATED MAP</span></div>
+        <div class="map-canvas" aria-label="Illustrative map with simulated incident markers">
+          <div class="river"></div><div class="road road-one"></div><div class="road road-two"></div>
+          <span class="map-label-text label-a">DEMO VILLAGE</span><span class="map-label-text label-b">OLD BUS STAND</span><span class="map-label-text label-c">RIVER ROAD</span>
+          <button class="map-pin pin-one critical-pin" data-incident="INC-001" title="INC-001 critical">1</button>
+          <button class="map-pin pin-two high-pin" data-incident="INC-002" title="INC-002 high">2</button>
+          <button class="map-pin pin-three medium-pin" data-incident="INC-003" title="INC-003 medium">3</button>
+          <button class="map-pin pin-four critical-pin" data-incident="INC-004" title="INC-004 critical">4</button>
+          <button class="map-pin pin-five zone-pin" data-zone="Village C" title="Silent zone">!</button>
+          <div class="map-key"><span><i class="dot critical"></i> Critical</span><span><i class="dot high"></i> High</span><span><i class="dot medium"></i> Medium</span><span><i class="dot zone"></i> Silent zone</span></div>
+        </div>
+        <div class="map-foot"><span>⌖ Map illustration for prototype</span><button class="text-button" id="showAll">Show all incidents →</button></div>
+      </article>
+
+      <article class="panel queue-panel">
+        <div class="panel-head"><div><h3>Priority queue</h3><p class="subtle">Ranked by rule-based score</p></div><span class="count-pill" id="queueCount">8 reports</span></div>
+        <div class="filters"><input id="searchInput" type="search" placeholder="Search reports or locations…" aria-label="Search reports"><select id="priorityFilter" aria-label="Filter priority"><option value="All">All priorities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+        <div id="incidentList" class="incident-list"></div>
+      </article>
+    </section>
+
+    <section class="details-grid">
+      <article class="panel detail-panel">
+        <div class="panel-head"><div><span class="eyebrow">SELECTED INCIDENT</span><h2 id="detailTitle">INC-001 · Flood rescue</h2></div><span id="detailStatus" class="status status-pending">Awaiting review</span></div>
+        <p id="detailDescription" class="detail-description">Rising water, 3 elderly people trapped near the old bus stand.</p>
+        <div class="detail-meta"><span>⌖ <b id="detailLocation">Old Bus Stand, Demo Village</b></span><span>♙ <b id="detailPeople">3 people affected</b></span><span>▤ <b id="detailReports">2 reports</b></span></div>
+        <div class="score-line"><div><span class="eyebrow">PRIORITY SCORE</span><div class="score"><strong id="detailScore">92</strong><span>/100</span><span id="detailPriority" class="priority critical">CRITICAL</span></div></div><div class="score-ring" id="scoreRing">92</div></div>
+        <h3 class="why-title">Why this score?</h3>
+        <p class="subtle small">Illustrative rule-based score. Each factor is shown transparently.</p>
+        <div id="scoreBreakdown" class="breakdown"></div>
+        <div class="actions"><button class="btn btn-primary" id="approveBtn">✓ Approve recommendation</button><button class="btn btn-light" id="editBtn">Edit incident</button><button class="btn btn-danger-light" id="overrideBtn">Override priority</button></div>
+        <p class="human-note">♧ Recommendation only — coordinator approval required. No automatic dispatch.</p>
+      </article>
+      <article class="panel zones-panel">
+        <div class="panel-head"><div><h3>Silent Zone Detector</h3><p class="subtle">Low report volume may indicate a communication gap.</p></div><span class="zone-count">3 alerts</span></div>
+        <div class="zone-alert"><div class="zone-symbol">!</div><div class="zone-content"><div class="zone-title">Village C <span class="status status-warning">Verify</span></div><p>0 reports received · Connectivity unknown</p><div class="zone-meter"><span style="width:8%"></span></div><small>Expected: 8 reports · Actual: 0</small><button class="btn btn-light verify-btn" data-zone="Village C">Mark for verification</button></div></div>
+        <div class="zone-alert"><div class="zone-symbol">!</div><div class="zone-content"><div class="zone-title">Hillview Hamlet</div><p>1 report received · Low signal suspected</p><div class="zone-meter"><span style="width:18%"></span></div><small>Expected: 6 reports · Actual: 1</small><button class="btn btn-light verify-btn" data-zone="Hillview Hamlet">Mark for verification</button></div></div>
+        <div class="zone-alert"><div class="zone-symbol">!</div><div class="zone-content"><div class="zone-title">Riverbank Ward</div><p>Fewer reports than expected</p><div class="zone-meter"><span style="width:25%"></span></div><small>Expected: 4 reports · Actual: 1</small><button class="btn btn-light verify-btn" data-zone="Riverbank Ward">Mark for verification</button></div></div>
+        <div class="fairness-note"><b>Why this matters</b><p>Zero reports do not mean an area is safe. TriageMap flags uncertainty for a human coordinator to investigate.</p></div>
+      </article>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="panel-head"><div><h3>Decision history</h3><p class="subtle">Recent actions taken in this demo session</p></div><button class="text-button" id="clearHistory">Clear history</button></div>
+      <div id="historyList" class="history-list"><p class="empty-history">No actions yet. Approve, edit, override, or verify an item to record an action.</p></div>
+    </section>
+    <footer>TRIAGEMAP · UI/UX PROTOTYPE · SIMULATED DATA ONLY</footer>
+  </main>
+
+  <dialog id="editDialog">
+    <form id="editForm" method="dialog">
+      <div class="dialog-head"><div><span class="eyebrow">INCIDENT MANAGEMENT</span><h2>Edit incident</h2></div><button type="button" class="close-btn" data-close="editDialog">×</button></div>
+      <label>Description<input id="editDescription" required></label>
+      <label>Location<input id="editLocation" required></label>
+      <label>People affected<input id="editPeople" type="number" min="0" required></label>
+      <div class="dialog-actions"><button type="button" class="btn btn-light" data-close="editDialog">Cancel</button><button class="btn btn-primary" type="submit">Save changes</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="overrideDialog">
+    <form id="overrideForm" method="dialog">
+      <div class="dialog-head"><div><span class="eyebrow">COORDINATOR CONTROL</span><h2>Override priority</h2></div><button type="button" class="close-btn" data-close="overrideDialog">×</button></div>
+      <label>New priority<select id="overridePriority"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></label>
+      <label>Reason for override<textarea id="overrideReason" rows="3" placeholder="Explain why the priority should change…" required></textarea></label>
+      <div class="dialog-actions"><button type="button" class="btn btn-light" data-close="overrideDialog">Cancel</button><button class="btn btn-primary" type="submit">Confirm override</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
